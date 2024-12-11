@@ -2,12 +2,10 @@
   kurzfassung_text,
   abstract_text,
 ) = [
-  #pagebreak()
-  #pagebreak()
+  #page(header: none, footer: none, [])
   = Kurzfassung
   #kurzfassung_text
-  #pagebreak()
-  #pagebreak()
+  #page(header: none, footer: none, [])
   = Abstract
   #abstract_text
 ]

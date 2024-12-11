@@ -40,7 +40,7 @@
       )
       #h(1fr)
       #box(
-        height: 100%, image("../assets/htl3r_logo.svg", )
+        height: 100%, image("../assets/htl3r_logo.svg")
       )
     ],
   )

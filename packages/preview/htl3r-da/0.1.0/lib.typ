@@ -30,13 +30,15 @@
   set page(
     paper: "a4",
     margin: (
+      top: settings.PAGE_MARGIN_VERTICAL,
+      bottom: settings.PAGE_MARGIN_VERTICAL,
       inside: settings.PAGE_MARGIN_INNER,
       outside: settings.PAGE_MARGIN_OUTER,
-    )
+    ),
   )
   show heading: h => [
     #set text(font: settings.FONT_TEXT_DISPLAY, size: 24pt)
-    #h #v(1em)
+    #v(2em) #h #v(1em)
   ]
   set par(justify: true)
   set text(
@@ -52,6 +54,50 @@
     autoren: autoren,
     datum: datum,
   )
+  set page(
+    header-ascent: 10pt,
+    header: context {
+      let i = counter(page).at(here()).first()
+      let is-odd = calc.odd(i)
+      context {
+        let target = heading.where(level: 1)
+        let footer = query(<footer>).filter((v) => {
+          v.location().page() == here().page()
+        }).first()
+        if footer != none {
+          let before = query(target.before(footer.location()))
+          if before.len() > 0 {
+            let current = box(height: 28pt, align(left + horizon, before.last().body))
+            if is-odd {
+              [#current #h(1fr) #box(height: 28pt, image("lib/assets/htl3r_logo.svg"))]
+            } else {
+              [#box(height: 40%, image("lib/assets/htl3r_logo.svg")) #h(1fr) #current]
+            }
+          }
+        }
+      }
+      v(-10pt)
+      line(length: 100%, stroke: 0.5pt)
+    },
+    footer-descent: 10pt,
+    footer: context {
+      let counter = counter(page)
+      let is-odd = calc.odd(counter.at(here()).first())
+      let aln = if is-odd {
+        right
+      } else {
+        left
+      }
+      line(length: 100%, stroke: 0.5pt)
+      v(-10pt)
+      align(aln)[#counter.display("i") <footer>]
+    }
+  )
+  show page: p => {
+    let i = counter(page).at(here()).first()
+    let is-odd = calc.odd(i)
+    set page(binding: if is-odd { right } else { left })
+  }
   abstract.create_page(kurzfassung_text, abstract_text)
   ai.create_page(autoren, datum, generative_ki_tools_klausel)
 }

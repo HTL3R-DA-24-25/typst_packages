@@ -5,8 +5,7 @@
   datum,
   generative_ki_tools_klausel,
 ) = [
-  #pagebreak()
-  #pagebreak()
+  #page(header: none, footer: none, [])
   = Ehrenwörtliche Erklärung
   Hiermit versichere ich, dass ich die vorliegende Arbeit selbstständig verfasst und keine
   anderen Hilfsmittel als die angegebenen benützt habe. Die Stellen, die anderen Werken
@@ -14,13 +13,17 @@
   oder sinngemäß entnommen sind, habe ich unter Angabe der Quelle und Einhaltung der
   Regeln wissenschaftlichen Zitierens kenntlich gemacht. Diese Versicherung umfasst auch
   in der Arbeit verwendete bildliche Darstellungen, Tabellen, Skizzen und Zeichnungen.
-
-  Für die Erstellung der Arbeit habe ich auch folgende Hilfsmittel generativer KI-Tools
-  (z. B. ChatGPT, Grammarly Go, Midjourney) zu folgendem Zweck verwendet:
-  #generative_ki_tools_klausel
-
   Die verwendeten Hilfsmittel wurden vollständig und wahrheitsgetreu inkl. Produktversion
   und Prompt ausgewiesen.
+
+  Für die Erstellung der Arbeit habe ich auch folgende Hilfsmittel generativer KI-Tools
+  zu folgendem Zweck verwendet:
+
+  #if generative_ki_tools_klausel == none [
+    Es wurden keine Hilfsmittel generativer KI-Tools für die Erstellung der Arbeit verwendet.
+  ] else [
+    #generative_ki_tools_klausel
+  ]
   #v(3em)
   Wien, am #format_date(datum)
   #v(7em)
