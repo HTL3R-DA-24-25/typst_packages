@@ -1,9 +1,10 @@
 #import "lib/settings.typ" as settings
 #import "lib/page/cover.typ" as cover
+#import "lib/page/abstract.typ" as abstract
 
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
-  titel_zusatz: "Wir sind supper toll!",
+  titel_zusatz: "Wir sind super toll!",
   abteilung: "IT",
   schuljahr: "2024/2025",
   autoren: (
@@ -12,6 +13,10 @@
   ),
   datum: datetime(year: 2024, month: 12, day: 1),
   druck_referenz: true,
+  kurzfassung_text: [#lorem(180)],
+  abstract_text: [#lorem(180)],
+  generative_ki_tools_liste: (),
+  generative_ki_tools_klausel: [Es wurden keine Hilfsmittel generativer KI-Tools für die Erstellung der Arbeit verwendet.],
   body,
 ) = {
   // validate
@@ -29,6 +34,10 @@
       outside: settings.PAGE_MARGIN_OUTER,
     )
   )
+  show heading: h => [
+    #set text(font: settings.FONT_TEXT_DISPLAY, size: 24pt)
+    #h #v(1em)
+  ]
   set text(
     font: settings.FONT_TEXT_BODY,
     size: settings.FONT_SIZE,
@@ -42,4 +51,6 @@
     autoren: autoren,
     datum: datum,
   )
+  abstract.create_page(kurzfassung_text, abstract_text)
+
 }

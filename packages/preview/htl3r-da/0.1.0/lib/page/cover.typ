@@ -3,7 +3,7 @@
 
 #let create_page(
   titel: "Meine Diplomarbeit",
-  titel_zusatz: "Wir sind supper toll!",
+  titel_zusatz: "Wir sind super toll!",
   abteilung: "IT",
   schuljahr: "2024/2025",
   autoren: (
@@ -15,7 +15,7 @@
   // Header
   block(
     width: auto,
-    height: 64pt,
+    height: 52pt,
     stroke: (
       left: 4pt + settings.COLOR_RED
     ),
@@ -30,7 +30,7 @@
         text(
           size: 8pt,
           [
-            #text(size: 9pt, [#strong([Höhere Technische Bundeslehranstalt Wien 3, Rennweg])]) \
+            #text(size: 8pt, [#strong([Höhere Technische Bundeslehranstalt Wien 3, Rennweg])]) \
             #v(1fr)
             Höhere Abteilung für Mechatronik \
             Höhere Abteilung für Informationstechnologie \
@@ -48,7 +48,7 @@
   // Body
   align(center)[
     #text(
-      size: 24pt,
+      size: 20pt,
       font: settings.FONT_TEXT_DISPLAY,
       "Diplomarbeit"
     )
@@ -56,8 +56,9 @@
   v(1fr)
   align(center)[
     #text(
-      size: 14pt,
-      [
+      size: 24pt,
+      font: settings.FONT_TEXT_DISPLAY,
+      strong[
         #titel \
         #titel_zusatz
       ]
@@ -70,23 +71,20 @@
       [
         ausgeführt an der \
         Höheren Abteilung für #format_department(abteilung) \
-        der Höheren Technischen Lehranstalt Wien 3 Rennweg
+        der Höheren Technischen Lehranstalt Wien 3 Rennweg \
+        im Schuljahr #schuljahr
       ]
     )
   ]
   v(1fr)
-  align(center)[
-    #text(
-      size: 10pt,
-      [im Schuljahr #schuljahr]
-    )
-  ]
-  v(1fr)
-  align(center, block(width: 50%)[
+  align(center, block(width: 60%)[
     #par(
       leading: 1.4em,
       text(size: 10pt,)[
         durch #h(1fr) unter Anleitung von \
+        #v(-5pt)
+        #line(length: 100%, stroke: 0.5pt)
+        #v(-5pt)
         #for autor in autoren [
           #text(size: 14pt, strong(autor.name)) #h(1fr) #autor.betreuung \
         ]
