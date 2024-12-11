@@ -1,6 +1,7 @@
 #import "lib/settings.typ" as settings
 #import "lib/page/cover.typ" as cover
 #import "lib/page/abstract.typ" as abstract
+#import "lib/page/ai.typ" as ai
 
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
@@ -15,7 +16,6 @@
   druck_referenz: true,
   kurzfassung_text: [#lorem(180)],
   abstract_text: [#lorem(180)],
-  generative_ki_tools_liste: (),
   generative_ki_tools_klausel: [Es wurden keine Hilfsmittel generativer KI-Tools für die Erstellung der Arbeit verwendet.],
   body,
 ) = {
@@ -38,6 +38,7 @@
     #set text(font: settings.FONT_TEXT_DISPLAY, size: 24pt)
     #h #v(1em)
   ]
+  set par(justify: true)
   set text(
     font: settings.FONT_TEXT_BODY,
     size: settings.FONT_SIZE,
@@ -52,5 +53,5 @@
     datum: datum,
   )
   abstract.create_page(kurzfassung_text, abstract_text)
-
+  ai.create_page(autoren, datum, generative_ki_tools_klausel)
 }
