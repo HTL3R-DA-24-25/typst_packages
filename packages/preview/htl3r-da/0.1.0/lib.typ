@@ -1,7 +1,7 @@
 #import "lib/settings.typ" as settings
 #import "lib/page/cover.typ" as cover
 #import "lib/page/abstract.typ" as abstract
-#import "lib/page/ai.typ" as ai
+#import "lib/page/erklaerung.typ" as erklaerung
 
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
@@ -99,5 +99,5 @@
     set page(binding: if is-odd { right } else { left })
   }
   abstract.create_page(kurzfassung_text, abstract_text)
-  ai.create_page(autoren, datum, generative_ki_tools_klausel)
+  erklaerung.create_page(autoren, datum, generative_ki_tools_klausel)
 }
