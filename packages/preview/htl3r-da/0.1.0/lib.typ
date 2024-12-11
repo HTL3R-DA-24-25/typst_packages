@@ -1,10 +1,11 @@
 #import "lib/settings.typ" as settings
+#import "lib/page/cover.typ" as cover
 
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
   titel_zusatz: "Wir sind supper toll!",
   abteilung: "IT",
-  schuljahr: "2024/25",
+  schuljahr: "2024/2025",
   autoren: (
     (name: "Max Mustermann", betreuung: "Otto Normalverbraucher", rolle: "Projektleiter"),
     (name: "Erika Mustermann", betreuung: "Lieschen Müller", rolle: "Stv. Projektleiter"),
@@ -31,6 +32,14 @@
   set text(
     font: settings.FONT_TEXT_BODY,
     size: settings.FONT_SIZE,
+    lang: "de"
   )
-  body
+  cover.create_page(
+    titel: titel,
+    titel_zusatz: titel_zusatz,
+    abteilung: abteilung,
+    schuljahr: schuljahr,
+    autoren: autoren,
+    datum: datum,
+  )
 }
