@@ -3,12 +3,14 @@
 #let FONT_SIZE = 11pt
 #let PAGE_MARGIN_INNER = 3cm
 #let PAGE_MARGIN_OUTER = 2cm
-#let PAGE_MARGIN_VERTICAL = 3cm
+#let PAGE_MARGIN_VERTICAL = 4cm
+#let FIGURE_WIDTH = 80%
+#let FIGURE_CAPTION_SIZE = 8pt
 #let COLOR_RED = rgb(255, 51, 0)
 #let HEADING_SIZES = (
   (
     size: 24pt,
-    top: 2em,
+    top: 0em,
     bottom: 1em,
   ),
   (

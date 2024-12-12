@@ -7,13 +7,38 @@
 #import "lib/page/tof.typ" as tof
 #import "lib/util.typ": blank_page
 
+/// Definiert den aktuellen Autor eines Kapitels. Der Autor eines
+/// Kapitels sollte immer nach dem Kapitel-Heading definiert werden.
+/// Definiert man den Autor nicht, so wird der Autor des vorherigen
+/// Kapitels angenommen.
 #let author(name) = [
   #metadata(name) <CHAPTER_AUTHOR>
 ]
 
+/// Markiert eine Abkürzung, sodass diese nachgeschlagen werden kann.
+/// Die Abkürzung sollte in den definierten Abkürzungen
+/// beinhaltet sein. Ansonsten ist diese nicht nachschlagbar.
 #let abbr(body) = [
   #link(label("ABBR_DES_"+body.text), body) #label("ABBR_"+body.text)
 ]
+
+/// Positioniert mehrere Abbildungen auf einer Zeile
+#let fspace(width: settings.FIGURE_WIDTH, ..figures) = {
+  let figures = figures.pos()
+  let gutter = 2em
+  let shave = gutter * (figures.len() - 1) / figures.len()
+  let width = 100% / figures.len() - shave
+  let columns = range(figures.len()).map((_) => width)
+  set block(width: 100%)
+  align(center)[#block(width: settings.FIGURE_WIDTH)[
+    #show figure: set image(width: 100%)
+    #grid(
+      columns: columns,
+      gutter: gutter,
+      ..figures
+    )
+  ]]
+}
 
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
@@ -64,6 +89,8 @@
     size: settings.FONT_SIZE,
     lang: "de"
   )
+  set figure(numbering: "1.1",)
+  show figure: set par(justify: false)
   cover.create_page(
     titel: titel,
     titel_zusatz: titel_zusatz,
@@ -73,7 +100,7 @@
     datum: datum,
   )
   set page(
-    header-ascent: 10pt,
+    header-ascent: 1cm,
     header: context {
       let i = counter(page).at(here()).first()
       let is-odd = calc.odd(i)
@@ -89,15 +116,15 @@
             if is-odd {
               [#current #h(1fr) #box(height: 28pt, image("lib/assets/htl3r_logo.svg"))]
             } else {
-              [#box(height: 40%, image("lib/assets/htl3r_logo.svg")) #h(1fr) #current]
+              [#box(height: 28pt, image("lib/assets/htl3r_logo.svg")) #h(1fr) #current]
             }
           }
         }
       }
-      v(-10pt)
+      v(-5pt)
       line(length: 100%, stroke: 0.5pt)
     },
-    footer-descent: 10pt,
+    footer-descent: 1cm,
     footer: context {
       let counter = counter(page)
       let is-odd = calc.odd(counter.at(here()).first())
@@ -107,7 +134,7 @@
         left
       }
       line(length: 100%, stroke: 0.5pt)
-      v(-10pt)
+      v(-5pt)
       align(aln)[#counter.display("i") <footer>]
     }
   )
@@ -128,12 +155,18 @@
     footer: context {
       let counter = counter(page)
       let is-odd = calc.odd(counter.at(here()).first())
-      let author = query(selector(<CHAPTER_AUTHOR>).before(here())).last().value
+      let authors = query(selector(<CHAPTER_AUTHOR>).before(here()))
+      let author = none
+      if authors.len() != 0 {
+        author = authors.last().value
+      }
       line(length: 100%, stroke: 0.5pt)
-      v(-10pt)
+      v(-5pt)
       if is-odd {
         align(right)[
-          Autor: #h(0.5em) #author
+          #if author != none [
+            Autor: #author
+          ]
           #h(1fr)
           #counter.display("1") <footer>
         ]
@@ -141,7 +174,9 @@
         align(left)[
           #counter.display("1") <footer>
           #h(1fr)
-          Autor: #h(0.5em) #author
+          #if author != none [
+            Autor: #author
+          ]
         ]
       }
     }
@@ -149,16 +184,22 @@
   set heading(numbering: "1.1")
   body
   text([#metadata("DA_END") <DA_END>])
+  context {
+    let body_page_count = query(<DA_END>).first().location().page() - query(<DA_BEGIN>).first().location().page()
+    if not calc.odd(body_page_count) {
+      blank_page()
+    }
+  }
   set heading(numbering: none)
   [
-    #blank_page()
     = Abkürzungsverzeichnis
+    #author(none)
     #context {
       for abbr in abkuerzungen [
-        #strong(abbr.abbr) #label("ABBR_DES_"+abbr.abbr) #h(1em) #abbr.ausschreibung #h(1fr)
+        #strong(abbr.abbr): #label("ABBR_DES_"+abbr.abbr) #abbr.langform #h(1fr)
         #if abbr.bedeutung != none [
-          #let page = query(label("ABBR_G_"+abbr.abbr)).first().location().page() - query(<DA_BEGIN>).first().location().page() - 1
-          #link(label("ABBR_G_"+abbr.abbr))[#emph[Glossar: #abbr.ausschreibung (S. #page)]]
+          #let page = query(label("ABBR_G_"+abbr.abbr)).first().location().page() - query(<DA_BEGIN>).first().location().page() + 1
+          #link(label("ABBR_G_"+abbr.abbr))[#emph[Glossar (S. #page)]]
         ] \
         #v(1em)
       ]
@@ -168,8 +209,10 @@
     #{
       for abbr in abkuerzungen [
         #if abbr.bedeutung != none [
-          #strong(abbr.abbr) #label("ABBR_G_"+abbr.abbr) #h(1em) #abbr.bedeutung \
-          #v(1em)
+          #par(hanging-indent: 2em)[
+            #strong(abbr.langform): #label("ABBR_G_"+abbr.abbr) #abbr.bedeutung \
+            #v(1em)
+          ]
         ]
       ]
     }
