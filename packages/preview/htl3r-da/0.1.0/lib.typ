@@ -123,19 +123,22 @@
     footer: context {
       let counter = counter(page)
       let is-odd = calc.odd(counter.at(here()).first())
-      let aln = if is-odd {
-        right
-      } else {
-        left
-      }
       let author = query(selector(<CHAPTER_AUTHOR>).before(here())).last().value
       line(length: 100%, stroke: 0.5pt)
       v(-10pt)
-      align(aln)[
-        #counter.display("1") <footer>
-        #h(1fr)
-        #author
-      ]
+      if is-odd {
+        align(right)[
+          Autor: #h(0.5em) #author
+          #h(1fr)
+          #counter.display("1") <footer>
+        ]
+      } else {
+        align(left)[
+          #counter.display("1") <footer>
+          #h(1fr)
+          Autor: #h(0.5em) #author
+        ]
+      }
     }
   )
   set heading(
