@@ -1,11 +1,11 @@
-#import "../util.typ": format_date
+#import "../util.typ": format_date, blank_page
 
 #let create_page(
   autoren,
   datum,
   generative_ki_tools_klausel,
 ) = [
-  #page(header: none, footer: none, [])
+  #blank_page()
   = Ehrenwörtliche Erklärung
   Hiermit versichere ich, dass ich die vorliegende Arbeit selbstständig verfasst und keine
   anderen Hilfsmittel als die angegebenen benützt habe. Die Stellen, die anderen Werken

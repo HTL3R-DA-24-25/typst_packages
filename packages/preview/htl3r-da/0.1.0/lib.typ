@@ -2,11 +2,15 @@
 #import "lib/page/cover.typ" as cover
 #import "lib/page/abstract.typ" as abstract
 #import "lib/page/erklaerung.typ" as erklaerung
+#import "lib/page/toc.typ" as toc
+#import "lib/page/tot.typ" as tot
+#import "lib/page/tof.typ" as tof
+#import "lib/util.typ": blank_page
 
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
   titel_zusatz: "Wir sind super toll!",
-  abteilung: "IT",
+  abteilung: "ITN",
   schuljahr: "2024/2025",
   autoren: (
     (name: "Max Mustermann", betreuung: "Otto Normalverbraucher", rolle: "Projektleiter"),
@@ -20,7 +24,7 @@
   body,
 ) = {
   // validate
-  assert(("IT", "M").contains(abteilung), message: "Abteilung muss entweder \"IT\" oder \"M\" sein.")
+  assert(("ITN", "ITM", "M").contains(abteilung), message: "Abteilung muss entweder \"ITN\", \"ITM\" oder \"M\" sein.")
 
   // document
   set document(
@@ -36,10 +40,15 @@
       outside: settings.PAGE_MARGIN_OUTER,
     ),
   )
-  show heading: h => [
-    #set text(font: settings.FONT_TEXT_DISPLAY, size: 24pt)
-    #v(2em) #h #v(1em)
-  ]
+  show heading: h => {
+    set text(font: settings.FONT_TEXT_DISPLAY, size: settings.HEADING_SIZES.at(h.level - 1).size)
+    if h.level == 1 {
+      pagebreak(weak: true)
+    }
+    v(settings.HEADING_SIZES.at(h.level - 1).top)
+    h
+    v(settings.HEADING_SIZES.at(h.level - 1).bottom)
+  }
   set par(justify: true)
   set text(
     font: settings.FONT_TEXT_BODY,
@@ -100,4 +109,28 @@
   }
   abstract.create_page(kurzfassung_text, abstract_text)
   erklaerung.create_page(autoren, datum, generative_ki_tools_klausel)
+  toc.create_page()
+  tot.create_page()
+  tof.create_page()
+  text([#metadata("BEGIN_DA") <BEGIN_DA>])
+  blank_page()
+  counter(page).update(1)
+  set page(
+    footer: context {
+      let counter = counter(page)
+      let is-odd = calc.odd(counter.at(here()).first())
+      let aln = if is-odd {
+        right
+      } else {
+        left
+      }
+      line(length: 100%, stroke: 0.5pt)
+      v(-10pt)
+      align(aln)[#counter.display("1") <footer>]
+    }
+  )
+  set heading(
+    numbering: "1."
+  )
+  body
 }

@@ -5,3 +5,35 @@
 #let PAGE_MARGIN_OUTER = 2cm
 #let PAGE_MARGIN_VERTICAL = 3cm
 #let COLOR_RED = rgb(255, 51, 0)
+#let HEADING_SIZES = (
+  (
+    size: 24pt,
+    top: 2em,
+    bottom: 1em,
+  ),
+  (
+    size: 20pt,
+    top: 1em,
+    bottom: 0.5em,
+  ),
+  (
+    size: 18pt,
+    top: 0.5em,
+    bottom: 0.25em,
+  ),
+  (
+    size: 16pt,
+    top: 0.5em,
+    bottom: 0.25em,
+  ),
+  (
+    size: 14pt,
+    top: 0.5em,
+    bottom: 0.25em,
+  ),
+  (
+    size: 12pt,
+    top: 0.5em,
+    bottom: 0.25em,
+  )
+)

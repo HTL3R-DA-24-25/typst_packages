@@ -6,8 +6,14 @@
 
 #let format_department(department) = {
   let departments = (
-    IT: "Informationstechnologie/Netzwerktechnik",
+    ITN: "Informationstechnologie/Netzwerktechnik",
+    ITM: "Informationstechnologie/Medientechnik",
     M: "Mechatronik",
   )
   departments.at(department)
+}
+
+/// Creates a completly blank page, useful for book binding
+#let blank_page() = {
+  page(header: none, footer: none, [])
 }
