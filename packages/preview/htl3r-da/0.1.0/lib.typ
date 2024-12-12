@@ -11,6 +11,10 @@
   #metadata(name) <CHAPTER_AUTHOR>
 ]
 
+#let abbr(body) = [
+  #link(label("ABBR_DES_"+body.text), body) #label("ABBR_"+body.text)
+]
+
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
   titel_zusatz: "Wir sind super toll!",
@@ -25,6 +29,7 @@
   kurzfassung_text: [#lorem(180)],
   abstract_text: [#lorem(180)],
   generative_ki_tools_klausel: [Es wurden keine Hilfsmittel generativer KI-Tools für die Erstellung der Arbeit verwendet.],
+  abkuerzungen: (),
   body,
 ) = {
   // validate
@@ -113,11 +118,11 @@
   }
   abstract.create_page(kurzfassung_text, abstract_text)
   erklaerung.create_page(autoren, datum, generative_ki_tools_klausel)
+  blank_page()
   toc.create_page()
   tot.create_page()
   tof.create_page()
-  text([#metadata("BEGIN_DA") <BEGIN_DA>])
-  blank_page()
+  text([#metadata("DA_BEGIN") <DA_BEGIN>])
   counter(page).update(1)
   set page(
     footer: context {
@@ -141,8 +146,32 @@
       }
     }
   )
-  set heading(
-    numbering: "1.1"
-  )
+  set heading(numbering: "1.1")
   body
+  text([#metadata("DA_END") <DA_END>])
+  set heading(numbering: none)
+  [
+    #blank_page()
+    = Abkürzungsverzeichnis
+    #context {
+      for abbr in abkuerzungen [
+        #strong(abbr.abbr) #label("ABBR_DES_"+abbr.abbr) #h(1em) #abbr.ausschreibung #h(1fr)
+        #if abbr.bedeutung != none [
+          #let page = query(label("ABBR_G_"+abbr.abbr)).first().location().page() - query(<DA_BEGIN>).first().location().page() - 1
+          #link(label("ABBR_G_"+abbr.abbr))[#emph[Glossar: #abbr.ausschreibung (S. #page)]]
+        ] \
+        #v(1em)
+      ]
+    }
+    #blank_page()
+    = Glossar
+    #{
+      for abbr in abkuerzungen [
+        #if abbr.bedeutung != none [
+          #strong(abbr.abbr) #label("ABBR_G_"+abbr.abbr) #h(1em) #abbr.bedeutung \
+          #v(1em)
+        ]
+      ]
+    }
+  ]
 }

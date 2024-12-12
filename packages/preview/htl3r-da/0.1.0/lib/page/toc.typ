@@ -1,12 +1,11 @@
 #import "../util.typ": blank_page
 
 #let create_page() = context [
-  #blank_page()
-  <TOC_BEGIN>
   #outline(
-    target: selector(heading).after(<BEGIN_DA>),
+    target: selector(heading).after(<DA_BEGIN>),
     depth: 3
   )
+  <TOC_BEGIN>
   #hide("TOC_END")
   <TOC_END>
   #context {

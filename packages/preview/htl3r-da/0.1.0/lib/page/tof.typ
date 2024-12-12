@@ -1,12 +1,11 @@
 #import "../util.typ": blank_page
 
 #let create_page() = [
-  #blank_page()
-  <TOF_BEGIN>
   #outline(
     title: [Abbildungsverzeichnis],
     target: figure.where(kind: image)
   )
+  <TOF_BEGIN>
   #hide("TOF_END")
   <TOF_END>
   #context {
