@@ -7,6 +7,10 @@
 #import "lib/page/tof.typ" as tof
 #import "lib/util.typ": blank_page
 
+#let author(name) = [
+  #metadata(name) <CHAPTER_AUTHOR>
+]
+
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
   titel_zusatz: "Wir sind super toll!",
@@ -124,9 +128,14 @@
       } else {
         left
       }
+      let author = query(selector(<CHAPTER_AUTHOR>).before(here())).last().value
       line(length: 100%, stroke: 0.5pt)
       v(-10pt)
-      align(aln)[#counter.display("1") <footer>]
+      align(aln)[
+        #counter.display("1") <footer>
+        #h(1fr)
+        #author
+      ]
     }
   )
   set heading(
