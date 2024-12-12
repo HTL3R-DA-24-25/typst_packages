@@ -76,8 +76,7 @@
         if footer != none {
           let before = query(target.before(footer.location()))
           if before.len() > 0 {
-            let current = if before.last().numbering != none { before.last().numbering + " " + before.last().body } else { before.last().body }
-            let current = box(height: 28pt, align(left + horizon, current))
+            let current = box(height: 28pt, align(left + horizon, before.last().body))
             if is-odd {
               [#current #h(1fr) #box(height: 28pt, image("lib/assets/htl3r_logo.svg"))]
             } else {
