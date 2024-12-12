@@ -1,11 +1,15 @@
 #import "lib/settings.typ" as settings
 #import "lib/page/cover.typ" as cover
 #import "lib/page/abstract.typ" as abstract
+#import "lib/page/preamble.typ" as preamble
 #import "lib/page/erklaerung.typ" as erklaerung
 #import "lib/page/toc.typ" as toc
 #import "lib/page/tot.typ" as tot
 #import "lib/page/tof.typ" as tof
+#import "lib/page/tol.typ" as tol
 #import "lib/util.typ": blank_page
+#import "@preview/codly:1.1.1": *
+#import "@preview/codly-languages:0.1.1": *
 
 /// Definiert den aktuellen Autor eines Kapitels. Der Autor eines
 /// Kapitels sollte immer nach dem Kapitel-Heading definiert werden.
@@ -21,6 +25,34 @@
 #let abbr(body) = [
   #link(label("ABBR_DES_"+body.text), body) #label("ABBR_"+body.text)
 ]
+
+#let code(caption: none, description: none, body) = [
+  #codly(
+    header: description,
+    header-cell-args: (align: left, fill: luma(240)),
+    breakable: true,
+  )
+  #figure(
+    body,
+    caption: caption,
+    supplement: [Quellcode],
+    kind: "code",
+  )
+]
+
+#let read_code(caption: none, filename: none, lang: none, text: none) = {
+  codly(
+    header: filename,
+    header-cell-args: (align: left, fill: luma(240)),
+    breakable: true,
+  )
+  figure(
+    raw(text, block: true, lang: lang),
+    caption: caption,
+    supplement: [Quellcode],
+    kind: "code",
+  )
+}
 
 /// Positioniert mehrere Abbildungen auf einer Zeile
 #let fspace(width: settings.FIGURE_WIDTH, ..figures) = {
@@ -49,6 +81,8 @@
     (name: "Max Mustermann", betreuung: "Otto Normalverbraucher", rolle: "Projektleiter"),
     (name: "Erika Mustermann", betreuung: "Lieschen Müller", rolle: "Stv. Projektleiter"),
   ),
+  betreuer_inkl_titel: ("Prof, Dipl.-Ing. Otto Normalverbraucher", "Prof, Dipl.-Ing. Lieschen Müller"),
+  sponsoren: ("Knallhart GmbH", "Gartenbedarfs GmbH", "Huber e.U.", "Huberit Vetrieb GmbH & Co. KG"),
   datum: datetime(year: 2024, month: 12, day: 1),
   druck_referenz: true,
   kurzfassung_text: [#lorem(180)],
@@ -61,6 +95,14 @@
   assert(("ITN", "ITM", "M").contains(abteilung), message: "Abteilung muss entweder \"ITN\", \"ITM\" oder \"M\" sein.")
 
   // document
+  show: codly-init.with()
+  codly(
+    display-icon: false,
+    zebra-fill: none,
+    number-align: left + top,
+    lang-format: none,
+    breakable: true,
+  )
   set document(
     title: titel,
     author: autoren.map((v) => v.name),
@@ -91,6 +133,7 @@
   )
   set figure(numbering: "1.1",)
   show figure: set par(justify: false)
+  show figure: set block(breakable: true)
   cover.create_page(
     titel: titel,
     titel_zusatz: titel_zusatz,
@@ -144,11 +187,13 @@
     set page(binding: if is-odd { right } else { left })
   }
   abstract.create_page(kurzfassung_text, abstract_text)
+  preamble.create_page(betreuer_inkl_titel, sponsoren)
   erklaerung.create_page(autoren, datum, generative_ki_tools_klausel)
   blank_page()
   toc.create_page()
   tot.create_page()
   tof.create_page()
+  tol.create_page()
   text([#metadata("DA_BEGIN") <DA_BEGIN>])
   counter(page).update(1)
   set page(
