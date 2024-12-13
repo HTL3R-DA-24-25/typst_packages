@@ -246,6 +246,13 @@
           #let page = query(label("ABBR_G_"+abbr.abbr)).first().location().page() - query(<DA_BEGIN>).first().location().page() + 1
           #link(label("ABBR_G_"+abbr.abbr))[#emph[Glossar (S. #page)]]
         ] \
+        // list abbr locations
+        #h(2em)
+        #for a in query(label("ABBR_"+abbr.abbr)) [
+          #let loc = a.location()
+          #let nr = loc.page() - query(<DA_BEGIN>).first().location().page() + 1
+          #link(loc)[(S. #nr) ]
+        ]
         #v(1em)
       ]
     }
