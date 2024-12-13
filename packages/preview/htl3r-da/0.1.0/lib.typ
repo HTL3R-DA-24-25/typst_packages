@@ -7,6 +7,7 @@
 #import "lib/page/tot.typ" as tot
 #import "lib/page/tof.typ" as tof
 #import "lib/page/tol.typ" as tol
+#import "lib/page/bibliography.typ" as bib
 #import "lib/page/printref.typ" as printref
 #import "lib/util.typ": blank_page
 #import "@preview/codly:1.1.1": *
@@ -88,6 +89,7 @@
   abstract_text: [#lorem(180)],
   generative_ki_tools_klausel: [Es wurden keine Hilfsmittel generativer KI-Tools für die Erstellung der Arbeit verwendet.],
   abkuerzungen: (),
+  literatur: [],
   body,
 ) = {
   // validate
@@ -275,7 +277,10 @@
       ]
     }
   ]
+  bib.create_page(literatur: literatur)
   if druck_referenz {
     printref.create_page()
+  } else {
+    blank_page()
   }
 }
