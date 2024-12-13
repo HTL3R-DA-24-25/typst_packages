@@ -1,6 +1,16 @@
 #import "../util.typ": blank_page
 
 #let create_page() = context [
+  #show outline.entry.where(
+    level: 1,
+  ): e => {
+    if e.element.numbering == none {
+      v(1em)
+      strong(e)
+    } else {
+      e
+    }
+  }
   #outline(
     target: selector(heading).after(<DA_BEGIN>),
     depth: 3
