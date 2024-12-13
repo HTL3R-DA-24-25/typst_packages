@@ -7,6 +7,7 @@
 #import "lib/page/tot.typ" as tot
 #import "lib/page/tof.typ" as tof
 #import "lib/page/tol.typ" as tol
+#import "lib/page/printref.typ" as printref
 #import "lib/util.typ": blank_page
 #import "@preview/codly:1.1.1": *
 #import "@preview/codly-languages:0.1.1": *
@@ -274,4 +275,7 @@
       ]
     }
   ]
+  if druck_referenz {
+    printref.create_page()
+  }
 }
