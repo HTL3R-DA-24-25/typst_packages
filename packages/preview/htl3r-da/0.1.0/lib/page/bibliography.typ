@@ -3,7 +3,6 @@
 #let create_page(
   literatur: []
 ) = context [
-  #show regex("^Bibliographie$"): "Literaturverzeichnis"
   #literatur
   <BIB_BEGIN>
   #hide("BIB_END")

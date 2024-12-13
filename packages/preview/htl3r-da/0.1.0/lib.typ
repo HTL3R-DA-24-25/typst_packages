@@ -7,70 +7,19 @@
 #import "lib/page/tot.typ" as tot
 #import "lib/page/tof.typ" as tof
 #import "lib/page/tol.typ" as tol
+#import "lib/page/abbreviation.typ" as abbreviation
+#import "lib/page/glossary.typ" as glossary
 #import "lib/page/bibliography.typ" as bib
 #import "lib/page/printref.typ" as printref
-#import "lib/util.typ": blank_page
+#import "lib/util.typ" as util
 #import "@preview/codly:1.1.1": *
 #import "@preview/codly-languages:0.1.1": *
 
-/// Definiert den aktuellen Autor eines Kapitels. Der Autor eines
-/// Kapitels sollte immer nach dem Kapitel-Heading definiert werden.
-/// Definiert man den Autor nicht, so wird der Autor des vorherigen
-/// Kapitels angenommen.
-#let author(name) = [
-  #metadata(name) <CHAPTER_AUTHOR>
-]
-
-/// Markiert eine Abkürzung, sodass diese nachgeschlagen werden kann.
-/// Die Abkürzung sollte in den definierten Abkürzungen
-/// beinhaltet sein. Ansonsten ist diese nicht nachschlagbar.
-#let abbr(body) = [
-  #link(label("ABBR_DES_"+body.text), body) #label("ABBR_"+body.text)
-]
-
-#let code(caption: none, description: none, body) = [
-  #codly(
-    header: description,
-  )
-  #figure(
-    body,
-    caption: caption,
-    supplement: [Quellcode],
-    kind: "code",
-  )
-]
-
-#let code_file(caption: none, filename: none, lang: none, text: none, range: none, ranges: none) = {
-  codly(
-    header: filename,
-    ranges: ranges,
-    range: range,
-  )
-  figure(
-    raw(text, block: true, lang: lang),
-    caption: caption,
-    supplement: [Quellcode],
-    kind: "code",
-  )
-}
-
-/// Positioniert mehrere Abbildungen auf einer Zeile
-#let fspace(width: settings.FIGURE_WIDTH, ..figures) = {
-  let figures = figures.pos()
-  let gutter = 2em
-  let shave = gutter * (figures.len() - 1) / figures.len()
-  let width = 100% / figures.len() - shave
-  let columns = range(figures.len()).map((_) => width)
-  set block(width: 100%)
-  align(center)[#block(width: settings.FIGURE_WIDTH)[
-    #show figure: set image(width: 100%)
-    #grid(
-      columns: columns,
-      gutter: gutter,
-      ..figures
-    )
-  ]]
-}
+#let author = util.author
+#let fspace = util.fspace
+#let abbr = util.abbr
+#let code = util.code
+#let code_file = util.code_file
 
 #let diplomarbeit(
   titel: "Meine Diplomarbeit",
@@ -137,6 +86,7 @@
   set figure(numbering: "1.1",)
   show figure: set par(justify: false)
   show figure: set block(breakable: true)
+  set cite(style: "harvard-cite-them-right")
   cover.create_page(
     titel: titel,
     titel_zusatz: titel_zusatz,
@@ -192,7 +142,7 @@
   abstract.create_page(kurzfassung_text, abstract_text)
   preamble.create_page(betreuer_inkl_titel, sponsoren)
   erklaerung.create_page(autoren, datum, generative_ki_tools_klausel)
-  blank_page()
+  util.blank_page()
   toc.create_page()
   tot.create_page()
   tof.create_page()
@@ -235,52 +185,16 @@
   context {
     let body_page_count = query(<DA_END>).first().location().page() - query(<DA_BEGIN>).first().location().page()
     if not calc.odd(body_page_count) {
-      blank_page()
+      util.blank_page()
     }
   }
   set heading(numbering: none)
-  [
-    = Abkürzungsverzeichnis
-    #author(none)
-    #context {
-      for abbr in abkuerzungen [
-        #par(spacing: 0pt)[
-          #strong(abbr.abbr): #label("ABBR_DES_"+abbr.abbr) #abbr.langform #h(1fr)
-          #if abbr.bedeutung != none [
-            #let page = query(label("ABBR_G_"+abbr.abbr)).first().location().page() - query(<DA_BEGIN>).first().location().page() + 1
-            #link(label("ABBR_G_"+abbr.abbr))[#emph[Glossar (S. #page)]]
-          ]
-        ]
-        // list abbr locations
-        #let refs = query(label("ABBR_"+abbr.abbr))
-        #par(hanging-indent: 2em, spacing: 6pt, first-line-indent: 2em)[
-          #for (index, a) in refs.enumerate() [
-            #let loc = a.location()
-            #let nr = loc.page() - query(<DA_BEGIN>).first().location().page() + 1
-            #let delim = if index + 1 == refs.len() {""} else {","}
-            #link(loc)[#emph[(S. #{nr})#{delim} ]]
-          ]
-        ]
-        #v(1em)
-      ]
-    }
-    #blank_page()
-    = Glossar
-    #{
-      for abbr in abkuerzungen [
-        #if abbr.bedeutung != none [
-          #par(hanging-indent: 2em)[
-            #strong(abbr.langform): #label("ABBR_G_"+abbr.abbr) #abbr.bedeutung \
-            #v(1em)
-          ]
-        ]
-      ]
-    }
-  ]
+  abbreviation.create_page(abkuerzungen: abkuerzungen)
+  glossary.create_page(abkuerzungen: abkuerzungen)
   bib.create_page(literatur: literatur)
   if druck_referenz {
     printref.create_page()
   } else {
-    blank_page()
+    util.blank_page()
   }
 }
