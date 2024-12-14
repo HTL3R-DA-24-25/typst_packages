@@ -59,15 +59,6 @@
     title: titel,
     author: autoren.map((v) => v.name),
   )
-  set page(
-    paper: "a4",
-    margin: (
-      top: settings.PAGE_MARGIN_VERTICAL,
-      bottom: settings.PAGE_MARGIN_VERTICAL,
-      inside: settings.PAGE_MARGIN_INNER,
-      outside: settings.PAGE_MARGIN_OUTER,
-    ),
-  )
   show heading: h => {
     set text(font: settings.FONT_TEXT_DISPLAY, size: settings.HEADING_SIZES.at(h.level - 1).size)
     if h.level == 1 {
@@ -87,6 +78,16 @@
   show figure: set par(justify: false)
   show figure: set block(breakable: true)
   set cite(style: "harvard-cite-them-right")
+  // show link: underline
+  set page(
+    paper: "a4",
+    margin: (
+      top: settings.PAGE_MARGIN_VERTICAL,
+      bottom: settings.PAGE_MARGIN_VERTICAL,
+      inside: settings.PAGE_MARGIN_OUTER,
+      outside: settings.PAGE_MARGIN_OUTER,
+    ),
+  )
   cover.create_page(
     titel: titel,
     titel_zusatz: titel_zusatz,
@@ -94,6 +95,15 @@
     schuljahr: schuljahr,
     autoren: autoren,
     datum: datum,
+  )
+  set page(
+    paper: "a4",
+    margin: (
+      top: settings.PAGE_MARGIN_VERTICAL,
+      bottom: settings.PAGE_MARGIN_VERTICAL,
+      inside: settings.PAGE_MARGIN_INNER,
+      outside: settings.PAGE_MARGIN_OUTER,
+    ),
   )
   set page(
     header-ascent: 1cm,

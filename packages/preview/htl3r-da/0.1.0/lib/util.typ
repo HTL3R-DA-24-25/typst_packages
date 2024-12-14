@@ -64,14 +64,14 @@
 }
 
 /// Positioniert mehrere Abbildungen auf einer Zeile
-#let fspace(width: settings.FIGURE_WIDTH, ..figures) = {
+#let fspace(figure_width: settings.FIGURE_WIDTH, ..figures) = {
   let figures = figures.pos()
   let gutter = 2em
   let shave = gutter * (figures.len() - 1) / figures.len()
   let width = 100% / figures.len() - shave
   let columns = range(figures.len()).map((_) => width)
   set block(width: 100%)
-  align(center)[#block(width: settings.FIGURE_WIDTH)[
+  align(center)[#block(width: figure_width)[
     #show figure: set image(width: 100%)
     #grid(
       columns: columns,
