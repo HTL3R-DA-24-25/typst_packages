@@ -114,7 +114,12 @@
         let target = heading.where(level: 1)
         let footer = query(<footer>).filter((v) => {
           v.location().page() == here().page()
-        }).first()
+        })
+        if footer.len() == 0 {
+          footer = none
+        } else {
+          footer = footer.first()
+        }
         if footer != none {
           let before = query(target.before(footer.location()))
           if before.len() > 0 {
@@ -141,7 +146,7 @@
       }
       line(length: 100%, stroke: 0.5pt)
       v(-5pt)
-      align(aln)[#counter.display("i") <footer>]
+      [#align(aln)[#counter.display("i")] <footer>]
     }
   )
   show page: p => {
@@ -170,23 +175,23 @@
       }
       line(length: 100%, stroke: 0.5pt)
       v(-5pt)
-      if is-odd {
-        align(right)[
+      if is-odd [
+        #align(right)[
           #if author != none [
             Autor: #author
           ]
           #h(1fr)
-          #counter.display("1") <footer>
-        ]
-      } else {
-        align(left)[
-          #counter.display("1") <footer>
+          #counter.display("1")
+        ] <footer>
+      ] else [
+        #align(left)[
+          #counter.display("1")
           #h(1fr)
           #if author != none [
             Autor: #author
           ]
-        ]
-      }
+        ] <footer>
+      ]
     }
   )
   set heading(numbering: "1.1")

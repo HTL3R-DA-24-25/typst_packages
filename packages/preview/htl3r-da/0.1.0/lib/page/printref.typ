@@ -5,6 +5,7 @@
   #if not calc.odd(num_pages) {
     blank_page()
   }
+  #set page(header: none, footer: none)
   #heading(outlined: false, level: 1)[Druckgrößenkontrolle]
   Diese Seite sollte nach dem Probedruck entfernt werden.
   Einfach das ``` druck_referenz``` Argument auf ``` false``` setzen.
