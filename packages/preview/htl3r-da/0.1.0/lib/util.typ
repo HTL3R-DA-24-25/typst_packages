@@ -37,9 +37,19 @@
   #link(label("ABBR_DES_"+body.text), body) #label("ABBR_"+body.text)
 ]
 
-#let code(caption: none, description: none, body) = [
+/// Markiert eine Abkürzung, sodass diese nachgeschlagen werden kann.
+/// Die Abkürzung sollte in den definierten Abkürzungen
+/// beinhaltet sein. Ansonsten ist diese nicht nachschlagbar.
+/// Die Abkürzung ist dabei im Plural gehalten.
+#let abbrp(body) = [
+  #let singular = body.text.slice(0, body.text.len()-1)
+  #link(label("ABBR_DES_"+singular), body) #label("ABBR_"+singular)
+]
+
+#let code(caption: none, description: none, skips: none, body) = [
   #codly(
     header: description,
+    skips: skips,
   )
   #figure(
     body,
@@ -49,11 +59,12 @@
   )
 ]
 
-#let code_file(caption: none, filename: none, lang: none, text: none, range: none, ranges: none) = {
+#let code_file(caption: none, filename: none, lang: none, text: none, range: none, ranges: none, skips: none) = {
   codly(
     header: filename,
     ranges: ranges,
     range: range,
+    skips: skips,
   )
   figure(
     raw(text, block: true, lang: lang),

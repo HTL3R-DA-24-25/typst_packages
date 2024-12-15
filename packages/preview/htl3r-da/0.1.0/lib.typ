@@ -18,6 +18,7 @@
 #let author = util.author
 #let fspace = util.fspace
 #let abbr = util.abbr
+#let abbrp = util.abbrp
 #let code = util.code
 #let code_file = util.code_file
 
@@ -77,7 +78,6 @@
   set figure(numbering: "1.1",)
   show figure: set par(justify: false)
   show figure: set block(breakable: true)
-  set cite(style: "harvard-cite-them-right")
   // show link: underline
   set page(
     paper: "a4",
